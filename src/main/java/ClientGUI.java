@@ -8,6 +8,10 @@ import javafx.scene.Scene;
 import javafx.scene.control.Button;
 import javafx.scene.control.ListView;
 import javafx.scene.control.TextField;
+import javafx.scene.text.Font;
+import javafx.scene.text.FontPosture;
+import javafx.scene.text.FontWeight;
+import javafx.scene.text.Text;
 import javafx.scene.layout.BorderPane;
 import javafx.scene.layout.GridPane;
 import javafx.scene.layout.HBox;
@@ -17,9 +21,10 @@ import javafx.stage.WindowEvent;
 
 public class ClientGUI extends Application{
     TextField port_prompt;
-    Button clientChoice, a, b, c, d, e, f, g, h, i, j, k, l, m, n, o, p, q, r, s, t, u, v, w, x, y, z;
+    Text gameTitle;
+    Button clientChoice, startBtn, a, b, c, d, e, f, g, h, i, j, k, l, m, n, o, p, q, r, s, t, u, v, w, x, y, z, cat1, cat2, cat3;
     HashMap<String, Scene> sceneMap;
-    HBox buttonBox, letterBox;
+    HBox buttonBox, letterBox1, letterBox2, letterBox3;
     Scene startScene;
     BorderPane startPane;
     Client clientConnection;
@@ -62,15 +67,44 @@ public class ClientGUI extends Application{
         this.x = new Button("x");
         this.y = new Button("y");
         this.z = new Button("z");
+        
+        this.cat1 = new Button("category 1");
+        this.cat2 = new Button("category 2");
+        this.cat3 = new Button("category 3");
 
         this.port_prompt = new TextField();
         this.port_prompt.setPromptText("Enter port number here and then press Connect");
+        
+        this.gameTitle = new Text("Welcome to the Word Game!");
+        this.gameTitle.setFont(Font.font("book antiqua", FontWeight.BOLD, FontPosture.REGULAR, 50));
 
         this.clientChoice = new Button("Connect");
         this.clientChoice.setStyle("-fx-pref-width: 300px");
         this.clientChoice.setStyle("-fx-pref-height: 300px");
+        
+        this.startBtn = new Button("Start");
+        this.startBtn.setPrefSize(250, 150);
+        
+        this.startBtn.setOnAction(e-> {primaryStage.setScene(sceneMap.get("categories"));
+			primaryStage.show();
+        });
+        
+        this.cat1.setOnAction(e-> {primaryStage.setScene(sceneMap.get("guess"));
+        	clientConnection.send(cat1.getText());
+			primaryStage.show();
+        });
+        
+        this.cat2.setOnAction(e-> {primaryStage.setScene(sceneMap.get("guess"));
+        	clientConnection.send(cat2.getText());
+			primaryStage.show();
+        });
+        
+        this.cat3.setOnAction(e-> {primaryStage.setScene(sceneMap.get("guess"));
+        	clientConnection.send(cat3.getText());
+			primaryStage.show();
+        });
 
-        this.clientChoice.setOnAction(e-> {primaryStage.setScene(sceneMap.get("client"));
+        this.clientChoice.setOnAction(e-> {primaryStage.setScene(sceneMap.get("start"));
             primaryStage.setTitle("ClientGUI");
             String port = this.port_prompt.getText();
 
@@ -95,7 +129,11 @@ public class ClientGUI extends Application{
 
         sceneMap = new HashMap<>();
 
-        sceneMap.put("client",  createClientGui());
+        sceneMap = new HashMap<String, Scene>();
+
+        sceneMap.put("start",  createStartScene());
+        sceneMap.put("categories",  createCategoryScene());
+        sceneMap.put("guess",  createGuessScene());
 
         primaryStage.setOnCloseRequest(new EventHandler<WindowEvent>() {
             @Override
@@ -109,9 +147,47 @@ public class ClientGUI extends Application{
         primaryStage.show();
     }
 
-    public Scene createClientGui() {
-        letterBox = new HBox(a, b, c, d, e, f, g, h, i, j, k, l, m, n, o, p, q, r, s, t, u, v, w, x, y, z);
-        letterBox.setStyle("-fx-background-color: skyblue");
+    public void letter_handler(Button button) {
+        clientConnection.send(button.getText());
+        button.setDisable(true);
+    }
+
+    public Scene createStartScene() {
+		BorderPane root = new BorderPane();
+
+		root.setCenter(gameTitle);
+		root.setBottom(startBtn);
+		
+		BorderPane.setMargin(startBtn, new Insets(10, 325, 50, 325));
+
+		root.setStyle("-fx-background-color: lightBlue;");
+
+		return new Scene(root, 900, 600);
+    }
+    
+    public Scene createCategoryScene() {
+    	BorderPane root = new BorderPane();
+    	VBox vb = new VBox(cat1, cat2, cat3);
+    	
+    	root.setCenter(vb);
+    	return new Scene(root, 900, 600);
+    }
+    
+    public Scene createGuessScene() {
+    	BorderPane root = new BorderPane();
+   
+        letterBox1 = new HBox(a, b, c, d, e, f, g, h, i, j);
+        letterBox1.setStyle("-fx-background-color: skyblue");
+        
+        letterBox2 = new HBox(k, l, m, n, o, p, q, r, s);
+        letterBox2.setStyle("-fx-background-color: skyblue");
+        
+        letterBox3 = new HBox(s, t, u, v, w, x, y, z);
+        letterBox3.setStyle("-fx-background-color: skyblue");
+        
+        VBox vb = new VBox(letterBox1, letterBox2, letterBox3);
+        
+        root.setBottom(vb);
 
         a.setOnAction(e -> letter_handler(a));
         b.setOnAction(e -> letter_handler(b));
@@ -141,11 +217,6 @@ public class ClientGUI extends Application{
         z.setOnAction(e -> letter_handler(z));
 
 
-        return new Scene(letterBox, 900, 700);
-    }
-
-    public void letter_handler(Button button) {
-        clientConnection.send(button.getText());
-        button.setDisable(true);
+        return new Scene(root, 900, 600);
     }
 }
