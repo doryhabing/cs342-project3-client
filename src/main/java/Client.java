@@ -9,17 +9,19 @@ public class Client extends Thread{
 	Socket socketClient;
 	ObjectOutputStream out;
 	ObjectInputStream in;
+	int port;
 	
 	private Consumer<Serializable> callback;
 	
-	Client(Consumer<Serializable> call){
+	Client(Consumer<Serializable> call, String port_string){
 		callback = call;
+		port = Integer.parseInt(port_string);
 	}
 	
 	public void run() {
 		
 		try {
-			socketClient= new Socket("127.0.0.1",5555);
+			socketClient= new Socket("127.0.0.1",port);
 			out = new ObjectOutputStream(socketClient.getOutputStream());
 			in = new ObjectInputStream(socketClient.getInputStream());
 			socketClient.setTcpNoDelay(true);

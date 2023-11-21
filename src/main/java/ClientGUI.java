@@ -16,7 +16,7 @@ import javafx.stage.Stage;
 import javafx.stage.WindowEvent;
 
 public class ClientGUI extends Application{
-    TextField s1,s2,s3,s4, c1;
+    TextField s1,s2,s3,s4, c1, port_prompt;
     Button serverChoice,clientChoice,b1;
     HashMap<String, Scene> sceneMap;
     GridPane grid;
@@ -37,22 +37,27 @@ public class ClientGUI extends Application{
         // TODO Auto-generated method stub
         primaryStage.setTitle("ClientGUI");
 
-        this.clientChoice = new Button("Client");
+        this.port_prompt = new TextField();
+        this.port_prompt.setPromptText("Enter port number here and then press Connect");
+
+        this.clientChoice = new Button("Connect");
         this.clientChoice.setStyle("-fx-pref-width: 300px");
         this.clientChoice.setStyle("-fx-pref-height: 300px");
 
         this.clientChoice.setOnAction(e-> {primaryStage.setScene(sceneMap.get("client"));
-            primaryStage.setTitle("This is a client");
+            primaryStage.setTitle("ClientGUI");
+            String port = this.port_prompt.getText();
+
             clientConnection = new Client(data -> {
                 Platform.runLater(() -> {
                     listItems2.getItems().add(data.toString());
                 });
-            });
+            }, port);
 
             clientConnection.start();
         });
 
-        this.buttonBox = new HBox(400, serverChoice, clientChoice);
+        this.buttonBox = new HBox(400, port_prompt, clientChoice);
         startPane = new BorderPane();
         startPane.setPadding(new Insets(70));
         startPane.setCenter(buttonBox);
