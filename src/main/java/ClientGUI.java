@@ -16,12 +16,10 @@ import javafx.stage.Stage;
 import javafx.stage.WindowEvent;
 
 public class ClientGUI extends Application{
-    TextField s1,s2,s3,s4, c1, port_prompt;
-    Button serverChoice,clientChoice,b1;
+    TextField port_prompt;
+    Button clientChoice, a, b, c, d, e, f, g, h, i, j, k, l, m, n, o, p, q, r, s, t, u, v, w, x, y, z;
     HashMap<String, Scene> sceneMap;
-    GridPane grid;
-    HBox buttonBox;
-    VBox clientBox;
+    HBox buttonBox, letterBox;
     Scene startScene;
     BorderPane startPane;
     Client clientConnection;
@@ -36,6 +34,34 @@ public class ClientGUI extends Application{
     public void start(Stage primaryStage) throws Exception {
         // TODO Auto-generated method stub
         primaryStage.setTitle("ClientGUI");
+
+        // creating guess letter buttons
+        this.a = new Button("a");
+        this.b = new Button("b");
+        this.c = new Button("c");
+        this.d = new Button("d");
+        this.e = new Button("e");
+        this.f = new Button("f");
+        this.g = new Button("g");
+        this.h = new Button("h");
+        this.i = new Button("i");
+        this.j = new Button("j");
+        this.k = new Button("k");
+        this.l = new Button("l");
+        this.m = new Button("m");
+        this.n = new Button("n");
+        this.o = new Button("o");
+        this.p = new Button("p");
+        this.q = new Button("q");
+        this.r = new Button("r");
+        this.s = new Button("s");
+        this.t = new Button("t");
+        this.u = new Button("u");
+        this.v = new Button("v");
+        this.w = new Button("w");
+        this.x = new Button("x");
+        this.y = new Button("y");
+        this.z = new Button("z");
 
         this.port_prompt = new TextField();
         this.port_prompt.setPromptText("Enter port number here and then press Connect");
@@ -64,14 +90,10 @@ public class ClientGUI extends Application{
 
         startScene = new Scene(startPane, 800,800);
 
-        listItems = new ListView<String>();
-        listItems2 = new ListView<String>();
+        listItems = new ListView<>();
+        listItems2 = new ListView<>();
 
-        c1 = new TextField();
-        b1 = new Button("Send");
-        b1.setOnAction(e->{clientConnection.send(c1.getText()); c1.clear();});
-
-        sceneMap = new HashMap<String, Scene>();
+        sceneMap = new HashMap<>();
 
         sceneMap.put("client",  createClientGui());
 
@@ -88,9 +110,42 @@ public class ClientGUI extends Application{
     }
 
     public Scene createClientGui() {
-        clientBox = new VBox(10, c1,b1,listItems2);
-        clientBox.setStyle("-fx-background-color: blue");
+        letterBox = new HBox(a, b, c, d, e, f, g, h, i, j, k, l, m, n, o, p, q, r, s, t, u, v, w, x, y, z);
+        letterBox.setStyle("-fx-background-color: skyblue");
 
-        return new Scene(clientBox, 400, 300);
+        a.setOnAction(e -> letter_handler(a));
+        b.setOnAction(e -> letter_handler(b));
+        c.setOnAction(e -> letter_handler(c));
+        d.setOnAction(e -> letter_handler(d));
+        e.setOnAction(event -> letter_handler(e));
+        f.setOnAction(e -> letter_handler(f));
+        g.setOnAction(e -> letter_handler(g));
+        h.setOnAction(e -> letter_handler(h));
+        i.setOnAction(e -> letter_handler(i));
+        j.setOnAction(e -> letter_handler(j));
+        k.setOnAction(e -> letter_handler(k));
+        l.setOnAction(e -> letter_handler(l));
+        m.setOnAction(e -> letter_handler(m));
+        n.setOnAction(e -> letter_handler(n));
+        o.setOnAction(e -> letter_handler(o));
+        p.setOnAction(e -> letter_handler(p));
+        q.setOnAction(e -> letter_handler(q));
+        r.setOnAction(e -> letter_handler(r));
+        s.setOnAction(e -> letter_handler(s));
+        t.setOnAction(e -> letter_handler(t));
+        u.setOnAction(e -> letter_handler(u));
+        v.setOnAction(e -> letter_handler(v));
+        w.setOnAction(e -> letter_handler(w));
+        x.setOnAction(e -> letter_handler(x));
+        y.setOnAction(e -> letter_handler(y));
+        z.setOnAction(e -> letter_handler(z));
+
+
+        return new Scene(letterBox, 900, 700);
+    }
+
+    public void letter_handler(Button button) {
+        clientConnection.send(button.getText());
+        button.setDisable(true);
     }
 }
