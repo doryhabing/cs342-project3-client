@@ -10,12 +10,15 @@ public class Client extends Thread{
 	ObjectOutputStream out;
 	ObjectInputStream in;
 	int port;
+	String message;
+	String category1, category2, category3;
 	
 	private Consumer<Serializable> callback;
 	
 	Client(Consumer<Serializable> call, String port_string){
 		callback = call;
 		port = Integer.parseInt(port_string);
+		message = "";
 	}
 	
 	public void run() {
@@ -26,14 +29,26 @@ public class Client extends Thread{
 			in = new ObjectInputStream(socketClient.getInputStream());
 			socketClient.setTcpNoDelay(true);
 		}
-		catch(Exception e) {}
-		
+		catch (Exception e) {}
+
+		int i = 1;
 		while(true) {
 			try {
-				String message = in.readObject().toString();
+				message = in.readObject().toString();
 				callback.accept(message);
+
+				if (i == 1) {
+					category1 = message;
+					System.out.println(category1);
+				} else if (i == 2) {
+					category2 = message;
+				} else if (i == 3) {
+					category3 = message;
+				}
+
+				i++;
 			}
-			catch(Exception e) {}
+			catch (Exception e) {}
 		}
 	
     }

@@ -14,12 +14,11 @@ import javafx.scene.text.FontPosture;
 import javafx.scene.text.FontWeight;
 import javafx.scene.text.Text;
 import javafx.scene.layout.BorderPane;
-import javafx.scene.layout.GridPane;
 import javafx.scene.layout.HBox;
 import javafx.scene.layout.VBox;
 import javafx.stage.Stage;
 import javafx.stage.WindowEvent;
-impot java.lang.StringBuilder;
+import java.lang.StringBuilder;
 
 public class ClientGUI extends Application{
     TextField port_prompt;
@@ -33,6 +32,7 @@ public class ClientGUI extends Application{
     Client clientConnection;
     StringBuilder secretWord;
     ListView<String> listItems, listItems2;
+    String category1, category2, category3;
 
     public static void main(String[] args) {
         // TODO Auto-generated method stub
@@ -97,33 +97,41 @@ public class ClientGUI extends Application{
         this.y.setPrefSize(60, 60);
         this.z = new Button("z");
         this.z.setPrefSize(60, 60);
-        
-        this.cat1 = new Button("category 1");
+
+        this.cat1 = new Button();
         this.cat1.setPrefSize(250, 100);
-        this.cat2 = new Button("category 2");
+        this.cat2 = new Button();
         this.cat2.setPrefSize(250, 100);
-        this.cat3 = new Button("category 3");
+        this.cat3 = new Button();
         this.cat3.setPrefSize(250, 100);
-        
+
         this.port_prompt = new TextField();
         this.port_prompt.setPromptText("Enter port number here and then press Connect");
-        
+
         this.clientChoice = new Button("Connect");
         this.clientChoice.setPrefSize(250, 150);
-        
+
         this.gameTitle = new Text("Welcome to the Word Game!");
         this.gameTitle.setFont(Font.font("book antiqua", FontWeight.BOLD, FontPosture.REGULAR, 50));
-        
+
         this.startBtn = new Button("Start");
         this.startBtn.setPrefSize(250, 150);
-        
+
         this.chooseCategory = new Text("Pick a category to try and guess a word:");
         this.chooseCategory.setFont(Font.font("book antiqua", FontPosture.REGULAR, 25));
-        
+
         this.guessPrompt = new Text("Pick a letter to see if it's in the secret word:");
         this.guessPrompt.setFont(Font.font("book antiqua", FontPosture.REGULAR, 25));
-        
+
         this.startBtn.setOnAction(e-> {primaryStage.setScene(sceneMap.get("categories"));
+            this.category1 = clientConnection.category1;
+            this.category2 = clientConnection.category2;
+            this.category3 = clientConnection.category3;
+
+            this.cat1.setText(category1);
+            this.cat2.setText(category2);
+            this.cat3.setText(category3);
+
 			primaryStage.show();
         });
         
@@ -168,8 +176,6 @@ public class ClientGUI extends Application{
 
         sceneMap = new HashMap<>();
 
-        sceneMap = new HashMap<String, Scene>();
-
         sceneMap.put("start",  createStartScene());
         sceneMap.put("categories",  createCategoryScene());
         sceneMap.put("guess",  createGuessScene());
@@ -208,11 +214,11 @@ public class ClientGUI extends Application{
     	BorderPane root = new BorderPane();
     	VBox vb = new VBox(cat1, cat2, cat3);
     	vb.setAlignment(Pos.CENTER);
-    	
+
     	root.setTop(chooseCategory);
     	root.setAlignment(chooseCategory, Pos.CENTER);
     	root.setCenter(vb);
-    	
+
     	root.setStyle("-fx-background-color: lightBlue;");
     	return new Scene(root, 900, 600);
     }
@@ -233,7 +239,7 @@ public class ClientGUI extends Application{
         letterBox3.setAlignment(Pos.CENTER);
         
         VBox vb = new VBox(letterBox1, letterBox2, letterBox3);
-        
+
         root.setTop(guessPrompt);
         root.setAlignment(guessPrompt, Pos.CENTER);
         root.setBottom(vb);
