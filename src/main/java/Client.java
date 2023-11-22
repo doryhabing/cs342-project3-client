@@ -3,14 +3,15 @@ import java.io.ObjectInputStream;
 import java.io.ObjectOutputStream;
 import java.io.Serializable;
 import java.net.Socket;
+import java.util.Objects;
 import java.util.function.Consumer;
 
 public class Client extends Thread{
 	Socket socketClient;
 	ObjectOutputStream out;
 	ObjectInputStream in;
-	int port;
-	String message;
+	int port, word_length;
+	String message, prev_message;
 	String category1, category2, category3;
 	
 	private Consumer<Serializable> callback;
@@ -39,13 +40,15 @@ public class Client extends Thread{
 
 				if (i == 1) {
 					category1 = message;
-					System.out.println(category1);
 				} else if (i == 2) {
 					category2 = message;
 				} else if (i == 3) {
 					category3 = message;
+				} else if (Objects.equals(prev_message, "length")) {
+					word_length = Integer.parseInt(message);
 				}
 
+				prev_message = message;
 				i++;
 			}
 			catch (Exception e) {}
