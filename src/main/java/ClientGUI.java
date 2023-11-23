@@ -255,6 +255,7 @@ public class ClientGUI extends Application{
     
     public Scene createGuessScene() {
     	BorderPane root = new BorderPane();
+        int word_length = clientConnection.word_length;
    
         letterBox1 = new HBox(a, b, c, d, e, f, g, h, i, j);
         letterBox1.setStyle("-fx-background-color: lightBlue");
