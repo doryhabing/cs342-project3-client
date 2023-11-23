@@ -26,7 +26,7 @@ public class ClientGUI extends Application{
     Button clientChoice, startBtn, a, b, c, d, e, f, g, h, i, j, k, l, m, n, o, p, q, r, s, t, u, v, w, x, y, z, cat1, cat2, cat3;
     HashMap<String, Scene> sceneMap;
     HBox letterBox1, letterBox2, letterBox3;
-    VBox buttonBox;
+    //VBox buttonBox;
     Scene startScene;
     BorderPane startPane;
     Client clientConnection;
@@ -143,11 +143,18 @@ public class ClientGUI extends Application{
         this.cat1.setOnAction(e-> {primaryStage.setScene(sceneMap.get("guess"));
         	clientConnection.send(cat1.getText());
             this.secretWord.setLength(0);
-            this.secretWord.append("*".repeat(5));
-            this.secretWordDisplay.setText(secretWord.toString());
+            
+            //empty while loop used to pause the program to allow time for client to receive length from server
+            while(clientConnection.word_length == 0) {}
+            
+            //syntax to change character at index 2 to m
+            //this.secretWord.setCharAt(2, 'm');
+            
+            this.secretWord.append("*".repeat(clientConnection.word_length));
+            this.secretWordDisplay.setText(String.valueOf(secretWord));
             this.secretWordDisplay.setFont(Font.font("book antiqua", FontWeight.BOLD, FontPosture.REGULAR, 100));
             
-            this.letterNum.setText("This word has 5 letters.");
+            this.letterNum.setText("This word has " + String.valueOf(clientConnection.word_length) + " letters.");
             this.letterNum.setFont(Font.font("book antiqua", FontPosture.REGULAR, 25));
             
 			primaryStage.show();
@@ -156,11 +163,15 @@ public class ClientGUI extends Application{
         this.cat2.setOnAction(e-> {primaryStage.setScene(sceneMap.get("guess"));
         	clientConnection.send(cat2.getText());
             this.secretWord.setLength(0);
-            this.secretWord.append("*".repeat(5));
-            this.secretWordDisplay.setText(secretWord.toString());
+            
+            //empty while loop used to pause the program to allow time for client to receive length from server
+            while(clientConnection.word_length == 0) {}
+            
+            this.secretWord.append("*".repeat(clientConnection.word_length));
+            this.secretWordDisplay.setText(String.valueOf(secretWord));
             this.secretWordDisplay.setFont(Font.font("book antiqua", FontWeight.BOLD, FontPosture.REGULAR, 100));
             
-            this.letterNum.setText("This word has 5 letters.");
+            this.letterNum.setText("This word has " + String.valueOf(clientConnection.word_length) + " letters.");
             this.letterNum.setFont(Font.font("book antiqua", FontPosture.REGULAR, 25));
             
 			primaryStage.show();
@@ -169,11 +180,15 @@ public class ClientGUI extends Application{
         this.cat3.setOnAction(e-> {primaryStage.setScene(sceneMap.get("guess"));
         	clientConnection.send(cat3.getText());
             secretWord.setLength(0);
-            secretWord.append("*".repeat(5));
-            this.secretWordDisplay.setText(secretWord.toString());
+            
+            //empty while loop used to pause the program to allow time for client to receive length from server
+            while(clientConnection.word_length == 0) {}
+            
+            secretWord.append("*".repeat(clientConnection.word_length));
+            this.secretWordDisplay.setText(String.valueOf(secretWord));
             this.secretWordDisplay.setFont(Font.font("book antiqua", FontWeight.BOLD, FontPosture.REGULAR, 100));
             
-            this.letterNum.setText("This word has 5 letters.");
+            this.letterNum.setText("This word has " + String.valueOf(clientConnection.word_length) + " letters.");
             this.letterNum.setFont(Font.font("book antiqua", FontPosture.REGULAR, 25));
             
 			primaryStage.show();
@@ -192,11 +207,12 @@ public class ClientGUI extends Application{
             clientConnection.start();
         });
 
-        this.buttonBox = new VBox(port_prompt, clientChoice);
-        port_prompt.setAlignment(Pos.CENTER);
-        clientChoice.setAlignment(Pos.CENTER);
+//        this.buttonBox = new VBox(port_prompt, clientChoice);
+//        port_prompt.setAlignment(Pos.CENTER);
+//        clientChoice.setAlignment(Pos.CENTER);
         startPane = new BorderPane();
-        startPane.setCenter(buttonBox);
+        startPane.setTop(port_prompt);
+        startPane.setCenter(clientChoice);
         startPane.setStyle("-fx-background-color: lightBlue;");
 
         startScene = new Scene(startPane, 900,600);
@@ -255,7 +271,6 @@ public class ClientGUI extends Application{
     
     public Scene createGuessScene() {
     	BorderPane root = new BorderPane();
-        int word_length = clientConnection.word_length;
    
         letterBox1 = new HBox(a, b, c, d, e, f, g, h, i, j);
         letterBox1.setStyle("-fx-background-color: lightBlue");
