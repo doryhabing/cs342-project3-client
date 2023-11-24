@@ -10,9 +10,9 @@ public class Client extends Thread{
 	Socket socketClient;
 	ObjectOutputStream out;
 	ObjectInputStream in;
-	int port, word_length;
-	String message, prev_message;
-	String category1, category2, category3;
+	int port, word_length, remaining_guesses;
+	boolean is_correct, cat1;
+	String message, prev_message, category1, category2, category3;
 	
 	private Consumer<Serializable> callback;
 	
@@ -25,7 +25,7 @@ public class Client extends Thread{
 	public void run() {
 		
 		try {
-			socketClient= new Socket("127.0.0.1",port);
+			socketClient = new Socket("127.0.0.1",port);
 			out = new ObjectOutputStream(socketClient.getOutputStream());
 			in = new ObjectInputStream(socketClient.getInputStream());
 			socketClient.setTcpNoDelay(true);
@@ -37,6 +37,7 @@ public class Client extends Thread{
 			try {
 				message = in.readObject().toString();
 				callback.accept(message);
+				System.out.println(message);
 
 				if (i == 1) {
 					category1 = message;
@@ -46,7 +47,19 @@ public class Client extends Thread{
 					category3 = message;
 				} else if (Objects.equals(prev_message, "length")) {
 					word_length = Integer.parseInt(message);
+				} else if (Objects.equals(prev_message, "correct")) {
+					is_correct = true;
+				} else if (Objects.equals(prev_message, "incorrect")) {
+					remaining_guesses = Integer.parseInt(message);
+					is_correct = false;
+				} else if (Objects.equals(prev_message, "lives")) {
+					remaining_guesses = Integer.parseInt(message);
 				}
+//				else if (Objects.equals(prev_message, "win")) {
+//
+//				} else if (Objects.equals(prev_message, "loss")) {
+//
+//				}
 
 				prev_message = message;
 				i++;
