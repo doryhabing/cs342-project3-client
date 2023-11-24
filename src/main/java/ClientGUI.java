@@ -25,8 +25,8 @@ public class ClientGUI extends Application{
     Text gameTitle, chooseCategory, guessPrompt, secretWordDisplay, letterNum;
     Button clientChoice, startBtn, a, b, c, d, e, f, g, h, i, j, k, l, m, n, o, p, q, r, s, t, u, v, w, x, y, z, cat1, cat2, cat3;
     HashMap<String, Scene> sceneMap;
-    HBox letterBox1, letterBox2, letterBox3;
-    //VBox buttonBox;
+    HBox letterBox1, letterBox2, letterBox3, clientBtn;
+    VBox buttonBox;
     Scene startScene;
     BorderPane startPane;
     Client clientConnection;
@@ -111,6 +111,7 @@ public class ClientGUI extends Application{
         this.letterNum = new Text();
 
         this.port_prompt = new TextField();
+        this.port_prompt.setPrefSize(10, 10);
         this.port_prompt.setPromptText("Enter port number here and then press Connect");
 
         this.clientChoice = new Button("Connect");
@@ -207,12 +208,14 @@ public class ClientGUI extends Application{
             clientConnection.start();
         });
 
-//        this.buttonBox = new VBox(port_prompt, clientChoice);
-//        port_prompt.setAlignment(Pos.CENTER);
-//        clientChoice.setAlignment(Pos.CENTER);
+        this.clientBtn = new HBox(clientChoice);
+        clientBtn.setAlignment(Pos.CENTER);
+        this.buttonBox = new VBox(clientBtn, port_prompt);
         startPane = new BorderPane();
-        startPane.setTop(port_prompt);
-        startPane.setCenter(clientChoice);
+        
+		startPane.setPadding(new Insets(200));
+		startPane.setCenter(buttonBox);
+        
         startPane.setStyle("-fx-background-color: lightBlue;");
 
         startScene = new Scene(startPane, 900,600);
