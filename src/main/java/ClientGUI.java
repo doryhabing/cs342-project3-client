@@ -19,6 +19,8 @@ import javafx.scene.layout.VBox;
 import javafx.stage.Stage;
 import javafx.stage.WindowEvent;
 import java.lang.StringBuilder;
+import javafx.animation.PauseTransition;
+import javafx.util.Duration;
 
 public class ClientGUI extends Application{
     TextField port_prompt;
@@ -147,6 +149,34 @@ public class ClientGUI extends Application{
         
         //incorrectGuess, win, loss, remainingGuesses
 
+
+        a.setOnAction(e -> letter_handler(a));
+        b.setOnAction(e -> letter_handler(b));
+        c.setOnAction(e -> letter_handler(c));
+        d.setOnAction(e -> letter_handler(d));
+        e.setOnAction(event -> letter_handler(e));
+        f.setOnAction(e -> letter_handler(f));
+        g.setOnAction(e -> letter_handler(g));
+        h.setOnAction(e -> letter_handler(h));
+        i.setOnAction(e -> letter_handler(i));
+        j.setOnAction(e -> letter_handler(j));
+        k.setOnAction(e -> letter_handler(k));
+        l.setOnAction(e -> letter_handler(l));
+        m.setOnAction(e -> letter_handler(m));
+        n.setOnAction(e -> letter_handler(n));
+        o.setOnAction(e -> letter_handler(o));
+        p.setOnAction(e -> letter_handler(p));
+        q.setOnAction(e -> letter_handler(q));
+        r.setOnAction(e -> letter_handler(r));
+        s.setOnAction(e -> letter_handler(s));
+        t.setOnAction(e -> letter_handler(t));
+        u.setOnAction(e -> letter_handler(u));
+        v.setOnAction(e -> letter_handler(v));
+        w.setOnAction(e -> letter_handler(w));
+        x.setOnAction(e -> letter_handler(x));
+        y.setOnAction(e -> letter_handler(y));
+        z.setOnAction(e -> letter_handler(z));
+
         this.startBtn.setOnAction(e-> {primaryStage.setScene(sceneMap.get("categories"));
             this.category1 = clientConnection.category1;
             this.category2 = clientConnection.category2;
@@ -161,8 +191,7 @@ public class ClientGUI extends Application{
         
         this.cat1.setOnAction(e-> {primaryStage.setScene(sceneMap.get("guess"));
             clientConnection.word_length = 0;
-            clientConnection.send("category");
-        	clientConnection.send(cat1.getText());
+            clientConnection.send("category " + cat1.getText());
             this.secretWord.setLength(0);
 
             //empty while loop used to pause the program to allow time for client to receive length from server
@@ -179,8 +208,7 @@ public class ClientGUI extends Application{
         });
         
         this.cat2.setOnAction(e-> {primaryStage.setScene(sceneMap.get("guess"));
-            clientConnection.send("category");
-        	clientConnection.send(cat2.getText());
+            clientConnection.send("category " + cat2.getText());
             this.secretWord.setLength(0);
 
             //empty while loop used to pause the program to allow time for client to receive length from server
@@ -197,12 +225,11 @@ public class ClientGUI extends Application{
         });
         
         this.cat3.setOnAction(e-> {primaryStage.setScene(sceneMap.get("guess"));
-            clientConnection.send("category");
-        	clientConnection.send(cat3.getText());
+            clientConnection.send("category " + cat3.getText());
             this.secretWord.setLength(0);
 
             //empty while loop used to pause the program to allow time for client to receive length from server
-            while(clientConnection.word_length == 0) {}
+            while (clientConnection.word_length == 0) {}
 
             this.secretWord.append("*".repeat(clientConnection.word_length));
             this.secretWordDisplay.setText(String.valueOf(secretWord));
@@ -261,11 +288,42 @@ public class ClientGUI extends Application{
         primaryStage.setScene(startScene);
         primaryStage.show();
     }
- 
+
     public void letter_handler(Button button) {
         clientConnection.send(button.getText());
         button.setDisable(true);
-        
+
+        while (clientConnection.remaining_guesses == 0) {}
+
+        PauseTransition pause = new PauseTransition(Duration.millis(100));
+        pause.setOnFinished(event -> {
+            //if(guess word correctly){
+            stats.setText(win.getText());
+
+            //tell server word was guessed, set bool guessed to true
+            //}
+            if (clientConnection.remaining_guesses == 0) {
+                stats.setText(loss.getText());
+            }
+            //else if(clientConnection.remaining_guesses == 0){
+            //stats.setTest(loss.getText());
+            //tell server word was not guessed, set bool guessed to true
+            //}
+            //else if(incorrect letter guess){
+            //while(clientConnection.remaining_guesses == prevGuessNum){}
+            //stats.setText(incorrectGuess.getText());
+            //}
+            //else{
+            //stats.setText(" ");
+            //this.secretWord.setCharAt(clientConnection.index, button.getText());
+            //this.secretWordDisplay.setText(String.valueOf(secretWord));
+            //this.secretWordDisplay.setFont(Font.font("book antiqua", FontWeight.BOLD, FontPosture.REGULAR, 100));
+            //}
+
+            remainingGuesses.setText("Guesses remaining: " + clientConnection.remaining_guesses);
+        });
+        pause.play();
+
         //if(guess word correctly){
         stats.setText(win.getText());
         //tell server word was guessed, set bool guessed to true
@@ -339,40 +397,12 @@ public class ClientGUI extends Application{
         statsBox.setAlignment(Pos.CENTER);
         
         VBox vb = new VBox(statsBox, letterBox1, letterBox2, letterBox3);
-        
         VBox vb2 = new VBox (letterNum, guessPrompt, remainingGuesses);
 
         root.setTop(vb2);
         vb2.setAlignment(Pos.CENTER);
         root.setCenter(secretWordDisplay);
         root.setBottom(vb);
-
-        a.setOnAction(e -> letter_handler(a));
-        b.setOnAction(e -> letter_handler(b));
-        c.setOnAction(e -> letter_handler(c));
-        d.setOnAction(e -> letter_handler(d));
-        e.setOnAction(event -> letter_handler(e));
-        f.setOnAction(e -> letter_handler(f));
-        g.setOnAction(e -> letter_handler(g));
-        h.setOnAction(e -> letter_handler(h));
-        i.setOnAction(e -> letter_handler(i));
-        j.setOnAction(e -> letter_handler(j));
-        k.setOnAction(e -> letter_handler(k));
-        l.setOnAction(e -> letter_handler(l));
-        m.setOnAction(e -> letter_handler(m));
-        n.setOnAction(e -> letter_handler(n));
-        o.setOnAction(e -> letter_handler(o));
-        p.setOnAction(e -> letter_handler(p));
-        q.setOnAction(e -> letter_handler(q));
-        r.setOnAction(e -> letter_handler(r));
-        s.setOnAction(e -> letter_handler(s));
-        t.setOnAction(e -> letter_handler(t));
-        u.setOnAction(e -> letter_handler(u));
-        v.setOnAction(e -> letter_handler(v));
-        w.setOnAction(e -> letter_handler(w));
-        x.setOnAction(e -> letter_handler(x));
-        y.setOnAction(e -> letter_handler(y));
-        z.setOnAction(e -> letter_handler(z));
 
         root.setStyle("-fx-background-color: lightBlue;");
         return new Scene(root, 900, 600);
