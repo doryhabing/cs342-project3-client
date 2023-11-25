@@ -261,7 +261,7 @@ public class ClientGUI extends Application{
         primaryStage.setScene(startScene);
         primaryStage.show();
     }
-
+ 
     public void letter_handler(Button button) {
         clientConnection.send(button.getText());
         button.setDisable(true);
@@ -269,12 +269,18 @@ public class ClientGUI extends Application{
         //if(guess word correctly){
         stats.setText(win.getText());
         //tell server word was guessed, set bool guessed to true
+        //clientConnection.send("guessed");
         //}
-        //else if(clientConnection.remaining_guesses == 0){
-        //stats.setTest(loss.getText());
+        if(clientConnection.remaining_guesses == 0){
+        	stats.setText(loss.getText());
         //tell server word was not guessed, set bool guessed to true
+        //clientConnection.send("guessed");
+        //if(user has not run out of word guesses){
+        //	return to category guess
         //}
+        }
         //else if(incorrect letter guess){
+        //while(clientConnection.remaining_guesses == prevGuessNum){}
         //stats.setText(incorrectGuess.getText());
         //}
         //else{
@@ -283,7 +289,7 @@ public class ClientGUI extends Application{
         //this.secretWordDisplay.setText(String.valueOf(secretWord));
         //this.secretWordDisplay.setFont(Font.font("book antiqua", FontWeight.BOLD, FontPosture.REGULAR, 100));
         //}
-        
+        //prev guess num == clineltconneciotn.guesseraon
         remainingGuesses.setText("Guesses remaining: " + String.valueOf(clientConnection.remaining_guesses));
     }
 
