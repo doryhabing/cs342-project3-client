@@ -35,7 +35,7 @@ public class ClientGUI extends Application{
     StringBuilder secretWord;
     ListView<String> listItems, listItems2;
     String category1, category2, category3;
-    PauseTransition pause2, pause3;
+    PauseTransition pause2, pause3, pause4;
 
     public static void main(String[] args) {
         // TODO Auto-generated method stub
@@ -199,6 +199,11 @@ public class ClientGUI extends Application{
             this.letterNum.setFont(Font.font("book antiqua", FontPosture.REGULAR, 25));
         });
         
+        this.pause4 = new PauseTransition(Duration.seconds(3));
+        this.pause4.setOnFinished(event -> {
+        	javafx.application.Platform.exit();
+        });
+        
         this.cat1.setOnAction(e -> {primaryStage.setScene(sceneMap.get("guess"));
             clientConnection.word_length = 0;
             clientConnection.send("category " + cat1.getText());
@@ -207,7 +212,6 @@ public class ClientGUI extends Application{
             //empty while loop used to pause the program to allow time for client to receive length from server
             while(clientConnection.word_length == 0) {}
             
-            //PAUSE TRANSITION SO WORD_LENGTH GETS TIME TO UPDATE
             pause3.play();
             
 			primaryStage.show();
@@ -220,12 +224,6 @@ public class ClientGUI extends Application{
             //empty while loop used to pause the program to allow time for client to receive length from server
             while(clientConnection.word_length == 0) {}
 
-//            this.secretWord.append("*".repeat(clientConnection.word_length));
-//            this.secretWordDisplay.setText(String.valueOf(secretWord));
-//            this.secretWordDisplay.setFont(Font.font("book antiqua", FontWeight.BOLD, FontPosture.REGULAR, 100));
-//
-//            this.letterNum.setText("This word has " + String.valueOf(clientConnection.word_length) + " letters.");
-//            this.letterNum.setFont(Font.font("book antiqua", FontPosture.REGULAR, 25));
             pause3.play();
             
 			primaryStage.show();
@@ -238,14 +236,6 @@ public class ClientGUI extends Application{
             //empty while loop used to pause the program to allow time for client to receive length from server
             while (clientConnection.word_length == 0) {}
 
-//            this.secretWord.append("*".repeat(clientConnection.word_length));
-//            this.secretWordDisplay.setText(String.valueOf(secretWord));
-//            this.secretWordDisplay.setFont(Font.font("book antiqua", FontWeight.BOLD, FontPosture.REGULAR, 100));
-//
-//            this.letterNum.setText("This word has " + clientConnection.word_length + " letters.");
-//
-//            this.letterNum.setText("This word has " + String.valueOf(clientConnection.word_length) + " letters.");
-//            this.letterNum.setFont(Font.font("book antiqua", FontPosture.REGULAR, 25));
             pause3.play();
             
 			primaryStage.show();
@@ -339,11 +329,45 @@ public class ClientGUI extends Application{
 
         PauseTransition pause = new PauseTransition(Duration.millis(100));
         pause.setOnFinished(event -> {
-//            if(guess word correctly){
-//            	stats.setText(win.getText());
-//            }
-            if (clientConnection.remaining_guesses == 0){
-                stats.setText(loss.getText());
+            if(clientConnection.win){
+	            a.setDisable(true);
+	            b.setDisable(true);
+	            c.setDisable(true);
+	            d.setDisable(true);
+	            e.setDisable(true);
+	            f.setDisable(true);
+	            g.setDisable(true);
+	            h.setDisable(true);
+	            i.setDisable(true);
+	            j.setDisable(true);
+	            k.setDisable(true);
+	            l.setDisable(true);
+	            m.setDisable(true);
+	            n.setDisable(true);
+	            o.setDisable(true);
+	            p.setDisable(true);
+	            q.setDisable(true);
+	            r.setDisable(true);
+	            s.setDisable(true);
+	            t.setDisable(true);
+	            u.setDisable(true);
+	            v.setDisable(true);
+	            w.setDisable(true);
+	            x.setDisable(true);
+	            y.setDisable(true);
+	            z.setDisable(true);
+            	
+            	if(clientConnection.won) {
+            		stats.setText("You won the game! Congratulations!");
+        			stats.setFont(Font.font("book antiqua", FontWeight.BOLD, FontPosture.REGULAR, 50));
+        			pause4.play();
+            	}
+            	else {
+            		stats.setText(win.getText());
+            		pause2.play();
+            	}
+            }
+            else if (clientConnection.loss){
                 a.setDisable(true);
                 b.setDisable(true);
                 c.setDisable(true);
@@ -370,7 +394,16 @@ public class ClientGUI extends Application{
                 x.setDisable(true);
                 y.setDisable(true);
                 z.setDisable(true);
-                pause2.play();
+                
+            	if(clientConnection.lost){
+            		stats.setText("You lost the game! Better luck next time...");
+            		stats.setFont(Font.font("book antiqua", FontWeight.BOLD, FontPosture.REGULAR, 50));
+            		pause4.play();
+            	}
+            	else{
+                    stats.setText(loss.getText());
+                    pause2.play();
+            	}
             }
             else if(!clientConnection.is_correct){
             	stats.setText(incorrectGuess.getText());
