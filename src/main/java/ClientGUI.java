@@ -140,7 +140,6 @@ public class ClientGUI extends Application{
         
         this.loss = new Text("You ran out of guesses, try another word.");
         this.loss.setFont(Font.font("book antiqua", FontWeight.BOLD, FontPosture.REGULAR, 35));
-        //this.loss.setStyle("-fx-text-fill: red;");
         
         this.stats = new Text(" ");
         this.stats.setFont(Font.font("book antiqua", FontPosture.REGULAR, 25));
@@ -178,7 +177,7 @@ public class ClientGUI extends Application{
         y.setOnAction(e -> letter_handler(y));
         z.setOnAction(e -> letter_handler(z));
 
-        this.startBtn.setOnAction(e-> {primaryStage.setScene(sceneMap.get("categories"));
+        this.startBtn.setOnAction(e -> {primaryStage.setScene(sceneMap.get("categories"));
             this.category1 = clientConnection.category1;
             this.category2 = clientConnection.category2;
             this.category3 = clientConnection.category3;
@@ -189,18 +188,19 @@ public class ClientGUI extends Application{
 
 			primaryStage.show();
         });
-        
+
         this.pause3 = new PauseTransition(Duration.millis(100));
         this.pause3.setOnFinished(event -> {
             this.secretWord.append("*".repeat(clientConnection.word_length));
             this.secretWordDisplay.setText(String.valueOf(secretWord));
             this.secretWordDisplay.setFont(Font.font("book antiqua", FontWeight.BOLD, FontPosture.REGULAR, 100));
-            
+
             this.letterNum.setText("This word has " + String.valueOf(clientConnection.word_length) + " letters.");
             this.letterNum.setFont(Font.font("book antiqua", FontPosture.REGULAR, 25));
         });
         
-        this.cat1.setOnAction(e-> {primaryStage.setScene(sceneMap.get("guess"));
+        this.cat1.setOnAction(e -> {primaryStage.setScene(sceneMap.get("guess"));
+            clientConnection.word_length = 0;
             clientConnection.send("category " + cat1.getText());
             this.secretWord.setLength(0);
 
@@ -213,7 +213,7 @@ public class ClientGUI extends Application{
 			primaryStage.show();
         });
         
-        this.cat2.setOnAction(e-> {primaryStage.setScene(sceneMap.get("guess"));
+        this.cat2.setOnAction(e -> {primaryStage.setScene(sceneMap.get("guess"));
             clientConnection.send("category " + cat2.getText());
             this.secretWord.setLength(0);
 
@@ -223,7 +223,7 @@ public class ClientGUI extends Application{
 //            this.secretWord.append("*".repeat(clientConnection.word_length));
 //            this.secretWordDisplay.setText(String.valueOf(secretWord));
 //            this.secretWordDisplay.setFont(Font.font("book antiqua", FontWeight.BOLD, FontPosture.REGULAR, 100));
-//            
+//
 //            this.letterNum.setText("This word has " + String.valueOf(clientConnection.word_length) + " letters.");
 //            this.letterNum.setFont(Font.font("book antiqua", FontPosture.REGULAR, 25));
             pause3.play();
@@ -292,15 +292,15 @@ public class ClientGUI extends Application{
                 System.exit(0);
             }
         });
-        
+
         this.pause2 = new PauseTransition(Duration.seconds(2));
         pause2.setOnFinished(event -> {
         	primaryStage.setScene(sceneMap.get("categories"));
             primaryStage.show();
-            
+
             this.remainingGuesses.setText("Guesses remaining: 6");
             this.stats.setText(" ");
-            
+
             a.setDisable(false);
             b.setDisable(false);
             c.setDisable(false);

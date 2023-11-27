@@ -10,7 +10,7 @@ public class Client extends Thread{
 	Socket socketClient;
 	ObjectOutputStream out;
 	ObjectInputStream in;
-	int port, word_length = 0, remaining_guesses, index;
+	int port, word_length = 0, remaining_guesses, index, win_count, loss_count;
 	boolean is_correct, cat1;
 	String message, category1, category2, category3;
 
@@ -21,6 +21,8 @@ public class Client extends Thread{
 		port = Integer.parseInt(port_string);
 		message = "";
 		remaining_guesses = 0;
+		win_count = 0;
+		loss_count = 0;
 	}
 
 	public void run() {
@@ -59,12 +61,15 @@ public class Client extends Thread{
 					this.is_correct = false;
 				} else if (Objects.equals(parsed_message, "lives")) {
 					this.remaining_guesses = Integer.parseInt(message);
+				} else if (Objects.equals(parsed_message, "win")) {
+					this.win_count = Integer.parseInt(message);
+				} else if (Objects.equals(parsed_message, "loss")) {
+					this.loss_count = Integer.parseInt(message);
+				} else if (Objects.equals(parsed_message, "won")) {
+					this.win_count++;
+				} else if (Objects.equals(parsed_message, "lost")) {
+					this.loss_count++;
 				}
-//				else if (Objects.equals(prev_message, "win")) {
-//
-//				} else if (Objects.equals(prev_message, "loss")) {
-//
-//				}
 
 			}
 			catch (Exception e) {}
