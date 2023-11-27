@@ -107,10 +107,10 @@ public class ClientGUI extends Application{
         this.cat2.setPrefSize(250, 100);
         this.cat3 = new Button();
         this.cat3.setPrefSize(250, 100);
-        
+
         this.secretWordDisplay = new Text();
         this.secretWord = new StringBuilder();
-        
+
         this.letterNum = new Text();
 
         this.port_prompt = new TextField();
@@ -131,22 +131,23 @@ public class ClientGUI extends Application{
 
         this.guessPrompt = new Text("Pick a letter to see if it's in the secret word:");
         this.guessPrompt.setFont(Font.font("book antiqua", FontPosture.REGULAR, 25));
-        
+
         this.incorrectGuess = new Text("Oops, wrong guess! Try again.");
         this.incorrectGuess.setFont(Font.font("book antiqua", FontPosture.REGULAR, 15));
-        
+
         this.win = new Text("You guessed the secret word, nice job!");
         this.win.setFont(Font.font("book antiqua", FontPosture.REGULAR, 25));
-        
+
         this.loss = new Text("You ran out of guesses, try another word.");
         this.loss.setFont(Font.font("book antiqua", FontWeight.BOLD, FontPosture.REGULAR, 35));
-        
+        //this.loss.setStyle("-fx-text-fill: red;");
+
         this.stats = new Text(" ");
         this.stats.setFont(Font.font("book antiqua", FontPosture.REGULAR, 25));
-        
+
         this.remainingGuesses = new Text("Guesses remaining: 6");
         this.remainingGuesses.setFont(Font.font("book antiqua", FontPosture.REGULAR, 20));
-        
+
         //incorrectGuess, win, loss, remainingGuesses
 
 
@@ -177,7 +178,7 @@ public class ClientGUI extends Application{
         y.setOnAction(e -> letter_handler(y));
         z.setOnAction(e -> letter_handler(z));
 
-        this.startBtn.setOnAction(e -> {primaryStage.setScene(sceneMap.get("categories"));
+        this.startBtn.setOnAction(e-> {primaryStage.setScene(sceneMap.get("categories"));
             this.category1 = clientConnection.category1;
             this.category2 = clientConnection.category2;
             this.category3 = clientConnection.category3;
@@ -186,7 +187,7 @@ public class ClientGUI extends Application{
             this.cat2.setText(category2);
             this.cat3.setText(category3);
 
-			primaryStage.show();
+            primaryStage.show();
         });
 
         this.pause3 = new PauseTransition(Duration.millis(100));
@@ -198,37 +199,43 @@ public class ClientGUI extends Application{
             this.letterNum.setText("This word has " + String.valueOf(clientConnection.word_length) + " letters.");
             this.letterNum.setFont(Font.font("book antiqua", FontPosture.REGULAR, 25));
         });
-        
+
         this.pause4 = new PauseTransition(Duration.seconds(3));
         this.pause4.setOnFinished(event -> {
-        	javafx.application.Platform.exit();
+            javafx.application.Platform.exit();
         });
-        
-        this.cat1.setOnAction(e -> {primaryStage.setScene(sceneMap.get("guess"));
-            clientConnection.word_length = 0;
+
+        this.cat1.setOnAction(e-> {primaryStage.setScene(sceneMap.get("guess"));
             clientConnection.send("category " + cat1.getText());
             this.secretWord.setLength(0);
 
             //empty while loop used to pause the program to allow time for client to receive length from server
             while(clientConnection.word_length == 0) {}
-            
+
+            //PAUSE TRANSITION SO WORD_LENGTH GETS TIME TO UPDATE
             pause3.play();
-            
-			primaryStage.show();
+
+            primaryStage.show();
         });
-        
-        this.cat2.setOnAction(e -> {primaryStage.setScene(sceneMap.get("guess"));
+
+        this.cat2.setOnAction(e-> {primaryStage.setScene(sceneMap.get("guess"));
             clientConnection.send("category " + cat2.getText());
             this.secretWord.setLength(0);
 
             //empty while loop used to pause the program to allow time for client to receive length from server
             while(clientConnection.word_length == 0) {}
 
+//            this.secretWord.append("*".repeat(clientConnection.word_length));
+//            this.secretWordDisplay.setText(String.valueOf(secretWord));
+//            this.secretWordDisplay.setFont(Font.font("book antiqua", FontWeight.BOLD, FontPosture.REGULAR, 100));
+//
+//            this.letterNum.setText("This word has " + String.valueOf(clientConnection.word_length) + " letters.");
+//            this.letterNum.setFont(Font.font("book antiqua", FontPosture.REGULAR, 25));
             pause3.play();
-            
-			primaryStage.show();
+
+            primaryStage.show();
         });
-        
+
         this.cat3.setOnAction(e-> {primaryStage.setScene(sceneMap.get("guess"));
             clientConnection.send("category " + cat3.getText());
             this.secretWord.setLength(0);
@@ -236,9 +243,17 @@ public class ClientGUI extends Application{
             //empty while loop used to pause the program to allow time for client to receive length from server
             while (clientConnection.word_length == 0) {}
 
+//            this.secretWord.append("*".repeat(clientConnection.word_length));
+//            this.secretWordDisplay.setText(String.valueOf(secretWord));
+//            this.secretWordDisplay.setFont(Font.font("book antiqua", FontWeight.BOLD, FontPosture.REGULAR, 100));
+//
+//            this.letterNum.setText("This word has " + clientConnection.word_length + " letters.");
+//
+//            this.letterNum.setText("This word has " + String.valueOf(clientConnection.word_length) + " letters.");
+//            this.letterNum.setFont(Font.font("book antiqua", FontPosture.REGULAR, 25));
             pause3.play();
-            
-			primaryStage.show();
+
+            primaryStage.show();
         });
 
         this.clientChoice.setOnAction(e-> {primaryStage.setScene(sceneMap.get("start"));
@@ -259,8 +274,8 @@ public class ClientGUI extends Application{
         this.buttonBox = new VBox(clientBtn, port_prompt);
         startPane = new BorderPane();
 
-		startPane.setPadding(new Insets(200));
-		startPane.setCenter(buttonBox);
+        startPane.setPadding(new Insets(200));
+        startPane.setCenter(buttonBox);
 
         startPane.setStyle("-fx-background-color: lightBlue;");
 
@@ -285,7 +300,7 @@ public class ClientGUI extends Application{
 
         this.pause2 = new PauseTransition(Duration.seconds(2));
         pause2.setOnFinished(event -> {
-        	primaryStage.setScene(sceneMap.get("categories"));
+            primaryStage.setScene(sceneMap.get("categories"));
             primaryStage.show();
 
             this.remainingGuesses.setText("Guesses remaining: 6");
@@ -327,47 +342,31 @@ public class ClientGUI extends Application{
         clientConnection.send(button.getText());
         button.setDisable(true);
 
+        clientConnection.indexes.clear();
+
         PauseTransition pause = new PauseTransition(Duration.millis(100));
         pause.setOnFinished(event -> {
+            System.out.println(clientConnection.win);
             if(clientConnection.win){
-	            a.setDisable(true);
-	            b.setDisable(true);
-	            c.setDisable(true);
-	            d.setDisable(true);
-	            e.setDisable(true);
-	            f.setDisable(true);
-	            g.setDisable(true);
-	            h.setDisable(true);
-	            i.setDisable(true);
-	            j.setDisable(true);
-	            k.setDisable(true);
-	            l.setDisable(true);
-	            m.setDisable(true);
-	            n.setDisable(true);
-	            o.setDisable(true);
-	            p.setDisable(true);
-	            q.setDisable(true);
-	            r.setDisable(true);
-	            s.setDisable(true);
-	            t.setDisable(true);
-	            u.setDisable(true);
-	            v.setDisable(true);
-	            w.setDisable(true);
-	            x.setDisable(true);
-	            y.setDisable(true);
-	            z.setDisable(true);
-            	
-            	if(clientConnection.won) {
-            		stats.setText("You won the game! Congratulations!");
-        			stats.setFont(Font.font("book antiqua", FontWeight.BOLD, FontPosture.REGULAR, 50));
-        			pause4.play();
-            	}
-            	else {
-            		stats.setText(win.getText());
-            		pause2.play();
-            	}
-            }
-            else if (clientConnection.loss){
+                for(int i = 0; i < clientConnection.categories.size(); i++){
+                    if(clientConnection.categories.contains(cat1.getText())){
+                        this.cat1.setDisable(true);
+                    }
+                    if(clientConnection.categories.contains(cat2.getText())){
+                        this.cat2.setDisable(true);
+                    }
+                    if(clientConnection.categories.contains(cat3.getText())){
+                        this.cat3.setDisable(true);
+                    }
+                }
+            	stats.setText(win.getText());
+
+                for (int i = 0; i < clientConnection.indexes.size(); i++) {
+                    this.secretWord.setCharAt(clientConnection.indexes.get(i), button.getText().charAt(0));
+                }
+                this.secretWordDisplay.setText(String.valueOf(secretWord));
+                this.secretWordDisplay.setFont(Font.font("book antiqua", FontWeight.BOLD, FontPosture.REGULAR, 100));
+
                 a.setDisable(true);
                 b.setDisable(true);
                 c.setDisable(true);
@@ -394,77 +393,113 @@ public class ClientGUI extends Application{
                 x.setDisable(true);
                 y.setDisable(true);
                 z.setDisable(true);
-                
-            	if(clientConnection.lost){
-            		stats.setText("You lost the game! Better luck next time...");
-            		stats.setFont(Font.font("book antiqua", FontWeight.BOLD, FontPosture.REGULAR, 50));
-            		pause4.play();
-            	}
-            	else{
-                    stats.setText(loss.getText());
-                    pause2.play();
-            	}
+                pause2.play();
+            }
+            else if (clientConnection.remaining_guesses == 0){
+                stats.setText(loss.getText());
+                a.setDisable(true);
+                b.setDisable(true);
+                c.setDisable(true);
+                d.setDisable(true);
+                e.setDisable(true);
+                f.setDisable(true);
+                g.setDisable(true);
+                h.setDisable(true);
+                i.setDisable(true);
+                j.setDisable(true);
+                k.setDisable(true);
+                l.setDisable(true);
+                m.setDisable(true);
+                n.setDisable(true);
+                o.setDisable(true);
+                p.setDisable(true);
+                q.setDisable(true);
+                r.setDisable(true);
+                s.setDisable(true);
+                t.setDisable(true);
+                u.setDisable(true);
+                v.setDisable(true);
+                w.setDisable(true);
+                x.setDisable(true);
+                y.setDisable(true);
+                z.setDisable(true);
+                pause2.play();
             }
             else if(!clientConnection.is_correct){
-            	stats.setText(incorrectGuess.getText());
+                stats.setText(incorrectGuess.getText());
             }
             else{
-	            stats.setText(" ");
-	            this.secretWord.setCharAt(clientConnection.index, button.getText().charAt(0));
-	            this.secretWordDisplay.setText(String.valueOf(secretWord));
-	            this.secretWordDisplay.setFont(Font.font("book antiqua", FontWeight.BOLD, FontPosture.REGULAR, 100));
+                stats.setText(" ");
+                for (int i = 0; i < clientConnection.indexes.size(); i++) {
+                    this.secretWord.setCharAt(clientConnection.indexes.get(i), button.getText().charAt(0));
+                }
+                this.secretWordDisplay.setText(String.valueOf(secretWord));
+                this.secretWordDisplay.setFont(Font.font("book antiqua", FontWeight.BOLD, FontPosture.REGULAR, 100));
+            }
+
+            if(clientConnection.won){
+                stats.setText("Congratulations, you won!");
+                pause4.play();
+            }
+
+            if(clientConnection.lost){
+                stats.setText("Sorry, you lost!");
+                pause4.play();
             }
 
             remainingGuesses.setText("Guesses remaining: " + clientConnection.remaining_guesses);
         });
         pause.play();
+        clientConnection.win = false;
+        clientConnection.loss = false;
+        clientConnection.lost = false;
     }
 
     public Scene createStartScene() {
-		BorderPane root = new BorderPane();
+        BorderPane root = new BorderPane();
 
-		root.setCenter(gameTitle);
-		root.setBottom(startBtn);
-		
-		BorderPane.setMargin(startBtn, new Insets(10, 325, 50, 325));
+        root.setCenter(gameTitle);
+        root.setBottom(startBtn);
 
-		root.setStyle("-fx-background-color: lightBlue;");
+        BorderPane.setMargin(startBtn, new Insets(10, 325, 50, 325));
 
-		return new Scene(root, 900, 600);
+        root.setStyle("-fx-background-color: lightBlue;");
+
+        return new Scene(root, 900, 600);
     }
-    
+
     public Scene createCategoryScene() {
-    	BorderPane root = new BorderPane();
-    	VBox vb = new VBox(cat1, cat2, cat3);
-    	vb.setAlignment(Pos.CENTER);
+        BorderPane root = new BorderPane();
+        VBox vb = new VBox(cat1, cat2, cat3);
+        vb.setAlignment(Pos.CENTER);
 
-    	root.setTop(chooseCategory);
-    	root.setAlignment(chooseCategory, Pos.CENTER);
-    	root.setCenter(vb);
+        root.setTop(chooseCategory);
+        root.setAlignment(chooseCategory, Pos.CENTER);
+        root.setCenter(vb);
 
-    	root.setStyle("-fx-background-color: lightBlue;");
-    	return new Scene(root, 900, 600);
+        root.setStyle("-fx-background-color: lightBlue;");
+        return new Scene(root, 900, 600);
     }
-    
+
     public Scene createGuessScene() {
-    	BorderPane root = new BorderPane();
-   
+        BorderPane root = new BorderPane();
+
         letterBox1 = new HBox(a, b, c, d, e, f, g, h, i, j);
         letterBox1.setStyle("-fx-background-color: lightBlue");
         letterBox1.setAlignment(Pos.CENTER);
-        
+
         letterBox2 = new HBox(k, l, m, n, o, p, q, r, s);
         letterBox2.setStyle("-fx-background-color: lightBlue");
         letterBox2.setAlignment(Pos.CENTER);
-        
+
         letterBox3 = new HBox(s, t, u, v, w, x, y, z);
         letterBox3.setStyle("-fx-background-color: lightBlue");
         letterBox3.setAlignment(Pos.CENTER);
-        
+
         statsBox = new HBox(stats);
         statsBox.setStyle("-fx-background-color: lightBlue");
         statsBox.setAlignment(Pos.CENTER);
-        
+
         VBox vb = new VBox(statsBox, letterBox1, letterBox2, letterBox3);
         VBox vb2 = new VBox (letterNum, guessPrompt, remainingGuesses);
 

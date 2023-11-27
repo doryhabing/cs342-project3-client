@@ -3,6 +3,8 @@ import java.io.ObjectInputStream;
 import java.io.ObjectOutputStream;
 import java.io.Serializable;
 import java.net.Socket;
+import java.util.ArrayList;
+import java.util.List;
 import java.util.Objects;
 import java.util.function.Consumer;
 
@@ -10,9 +12,11 @@ public class Client extends Thread{
 	Socket socketClient;
 	ObjectOutputStream out;
 	ObjectInputStream in;
-	int port, word_length = 0, remaining_guesses, index, win_count, loss_count;
-	boolean is_correct, cat1;
+	int port, word_length = 0, remaining_guesses, win_count, loss_count;
+	boolean is_correct, win, lost, loss, won;
 	String message, category1, category2, category3;
+	List<Integer> indexes;
+	List<String> categories;
 
 	private Consumer<Serializable> callback;
 
@@ -23,6 +27,8 @@ public class Client extends Thread{
 		remaining_guesses = 0;
 		win_count = 0;
 		loss_count = 0;
+		indexes = new ArrayList<>();
+		categories = new ArrayList<>();
 	}
 
 	public void run() {
@@ -55,7 +61,7 @@ public class Client extends Thread{
 					this.word_length = Integer.parseInt(message);
 				} else if (Objects.equals(parsed_message, "correct")) {
 					this.is_correct = true;
-					this.index = Integer.parseInt(message);
+					this.indexes.add(Integer.parseInt(message));
 				} else if (Objects.equals(parsed_message, "incorrect")) {
 					this.remaining_guesses = Integer.parseInt(message);
 					this.is_correct = false;
@@ -63,19 +69,25 @@ public class Client extends Thread{
 					this.remaining_guesses = Integer.parseInt(message);
 				} else if (Objects.equals(parsed_message, "win")) {
 					this.win_count = Integer.parseInt(message);
+					this.win = true;
+				} else if (Objects.equals(parsed_message, "disable")) {
+					this.categories.add(message);
 				} else if (Objects.equals(parsed_message, "loss")) {
 					this.loss_count = Integer.parseInt(message);
+					this.loss = true;
 				} else if (Objects.equals(parsed_message, "won")) {
 					this.win_count++;
+					this.won = true;
 				} else if (Objects.equals(parsed_message, "lost")) {
 					this.loss_count++;
+					this.lost = true;
 				}
 
 			}
 			catch (Exception e) {}
 		}
 
-    }
+	}
 
 	public void send(String data) {
 
